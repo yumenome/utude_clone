@@ -13,18 +13,19 @@ const VideoDetail = () => {
   const [ videoDetail, setVideoDetail ] = useState(null);
   const [ videos, setVideos ] = useState(null);
   const { id } = useParams();
-
-  console.log(id);
-
+console.log(id);
   useEffect(() => {
     fetchAPI(`videos?part=snippet,statistics&id=${id}`)
       .then((data) => setVideoDetail(data.items[0]))
-      
-    fetchAPI(`search?part=snippet&relatedToVideoId=${id}&type=video`)
+
+      // search?part=snippet&relatedToVideoId=${id}&type=video
+      fetchAPI(`search?part=snippet&VideoId=${id}`)
       .then((data) => setVideos(data.items));
   },[id]);
+  console.log(videoDetail);
+  console.log(videos);
 
-  if(!videoDetail?.snippet) return 'loading...'; 
+  if(!videoDetail?.snippet) return 'loading'; 
 
   const { snippet : { title, channelId, channelTitle }, statistics: { viewCount, likeCount} } = videoDetail;
 <Box>
@@ -34,7 +35,7 @@ const VideoDetail = () => {
     <Box minHeight='95vh'>
       <Stack direction={{ xs: 'column', md: 'row'}}>
       <Box flex={1}>
-        <Box sx={{ width: '100%', position: 'sticky', top: '77px' }}>
+        <Box sx={{ width: '100%', position:'sticky', top: '77px' }}>
         
           <ReactPlayer url={`https://www.youtube.com/watch?v=${id}`} className="react-player" controls/>
           <Typography color="#fff" variant="h5" fontWeight="bold" p={2}>
